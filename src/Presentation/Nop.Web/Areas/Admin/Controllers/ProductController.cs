@@ -947,8 +947,16 @@ public partial class ProductController : BaseAdminController
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_VIEW)]
     public virtual async Task<IActionResult> List()
     {
+        // /Admin/Product/List?q=keyword prefills the product-name search.
+        // The value stays on the parameterless action so plugin overrides of List() still bind.
+        // PrepareProductSearchModelAsync keeps SearchProductName, and the grid posts #SearchProductName on first load.
+        var searchModel = new ProductSearchModel();
+        var keyword = Request.Query["q"].FirstOrDefault()?.Trim();
+        if (!string.IsNullOrEmpty(keyword))
+            searchModel.SearchProductName = keyword;
+
         //prepare model
-        var model = await _productModelFactory.PrepareProductSearchModelAsync(new ProductSearchModel());
+        var model = await _productModelFactory.PrepareProductSearchModelAsync(searchModel);
 
         return View(model);
     }
