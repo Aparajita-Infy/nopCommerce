@@ -11,7 +11,9 @@
 
 @{
     const string hideSearchBlockAttributeName = "ProductListPage.HideSearchBlock";
-    var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
+    // A deep-linked keyword must stay visible. Leave the saved collapse preference unchanged.
+    var hideSearchBlock = string.IsNullOrEmpty(Model.SearchProductName)
+        && await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
 }
 
 @if (Model.LicenseCheckModel.BlockPages != true)
