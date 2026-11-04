@@ -86,4 +86,14 @@ public partial interface IHomeModelFactory
     /// The task result contains the dashboard model
     /// </returns>
     Task<DataTablesModel> PrepareOrderAverageModelAsync(DataTablesModel model);
+
+    /// <summary>
+    /// Prepare the Store Pulse card. Vendors get an empty model. Each tile is included only when
+    /// the current user has the permissions of that tile's admin screens.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the Store Pulse model
+    /// </returns>
+    Task<StorePulseModel> PrepareStorePulseModelAsync();
 }

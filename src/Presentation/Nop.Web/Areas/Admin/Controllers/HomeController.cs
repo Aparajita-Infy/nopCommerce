@@ -144,6 +144,19 @@ public partial class HomeController : BaseAdminController
         return PartialView("Table", model);
     }
 
+    /// <summary>
+    /// Store Pulse tiles. Permission is applied per tile inside the factory, so a user who can see
+    /// one tile still receives the others they are allowed to see. Vendors receive an empty body.
+    /// </summary>
+    public virtual async Task<IActionResult> GetStorePulse()
+    {
+        var model = await _homeModelFactory.PrepareStorePulseModelAsync();
+        if (model.IsLoggedInAsVendor)
+            return Content(string.Empty);
+
+        return PartialView("_StorePulseTiles", model);
+    }
+
     [HttpPost]
     public virtual async Task<IActionResult> AcceptLicenseTerms()
     {

@@ -1,0 +1,240 @@
+@model StorePulseModel
+@{
+    var dateLocale = JavaScriptEncoder.Default.Encode(CultureInfo.CurrentCulture.Name);
+}
+
+<div class="row">
+    @if (Model.AbandonedCarts.Visible)
+    {
+        <div class="col-md-6">
+            <div class="card card-default store-pulse-tile">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-cart-plus"></i>
+                        @T("Admin.Dashboard.StorePulse.AbandonedCarts")
+                        <span class="store-pulse-count">(@Model.AbandonedCarts.TotalCount)</span>
+                        <span class="ico-help" data-toggle="tooltip" title="@T("Admin.Dashboard.StorePulse.AbandonedCarts.Hint")">
+                            <i class="fas fa-circle-question"></i>
+                        </span>
+                    </h3>
+                    @if (!string.IsNullOrEmpty(Model.AbandonedCarts.ViewAllUrl))
+                    {
+                        <div class="card-tools float-right">
+                            <a href="@Model.AbandonedCarts.ViewAllUrl" class="btn btn-xs btn-info btn-flat">@T("Admin.Dashboard.StorePulse.ViewAll")</a>
+                        </div>
+                    }
+                </div>
+                <div class="card-body">
+                    @if (Model.AbandonedCarts.LoadFailed)
+                    {
+                        <p>@T("Admin.Dashboard.StorePulse.Alert.FailedLoad")</p>
+                    }
+                    else if (!Model.AbandonedCarts.Rows.Any())
+                    {
+                        <p class="store-pulse-empty">@T("Admin.Dashboard.StorePulse.NoItems")</p>
+                    }
+                    else
+                    {
+                        <table class="table table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>@T("Admin.Dashboard.StorePulse.AbandonedCarts.Fields.Email")</th>
+                                    <th>@T("Admin.Dashboard.StorePulse.AbandonedCarts.Fields.ItemCount")</th>
+                                    <th>@T("Admin.Dashboard.StorePulse.AbandonedCarts.Fields.LastUpdated")</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var row in Model.AbandonedCarts.Rows)
+                                {
+                                    <tr>
+                                        <td><a class="store-pulse-row-link" href="@row.Url">@row.Email</a></td>
+                                        <td>@row.ItemCount</td>
+                                        <td class="store-pulse-when" data-when="@row.LastUpdated.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture)">@row.LastUpdated.ToString("G")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.LowStock.Visible)
+    {
+        <div class="col-md-6">
+            <div class="card card-default store-pulse-tile">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        @T("Admin.Dashboard.StorePulse.LowStock")
+                        <span class="store-pulse-count">(@Model.LowStock.TotalCount)</span>
+                        <span class="ico-help" data-toggle="tooltip" title="@T("Admin.Dashboard.StorePulse.LowStock.Hint")">
+                            <i class="fas fa-circle-question"></i>
+                        </span>
+                    </h3>
+                    @if (!string.IsNullOrEmpty(Model.LowStock.ViewAllUrl))
+                    {
+                        <div class="card-tools float-right">
+                            <a href="@Model.LowStock.ViewAllUrl" class="btn btn-xs btn-info btn-flat">@T("Admin.Dashboard.StorePulse.ViewAll")</a>
+                        </div>
+                    }
+                </div>
+                <div class="card-body">
+                    @if (Model.LowStock.LoadFailed)
+                    {
+                        <p>@T("Admin.Dashboard.StorePulse.Alert.FailedLoad")</p>
+                    }
+                    else if (!Model.LowStock.Rows.Any())
+                    {
+                        <p class="store-pulse-empty">@T("Admin.Dashboard.StorePulse.NoItems")</p>
+                    }
+                    else
+                    {
+                        <table class="table table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>@T("Admin.Dashboard.StorePulse.LowStock.Fields.Name")</th>
+                                    <th>@T("Admin.Dashboard.StorePulse.LowStock.Fields.StockQuantity")</th>
+                                    <th>@T("Admin.Dashboard.StorePulse.LowStock.Fields.MinStockQuantity")</th>
+                                    <th>@T("Admin.Dashboard.StorePulse.LowStock.Fields.Activity")</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var row in Model.LowStock.Rows)
+                                {
+                                    <tr>
+                                        <td><a class="store-pulse-row-link" href="@row.Url">@row.Name</a></td>
+                                        <td>@row.StockQuantity</td>
+                                        <td>@row.MinStockQuantity</td>
+                                        <td>@row.Activity</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.PendingPayments.Visible)
+    {
+        <div class="col-md-6">
+            <div class="card card-default store-pulse-tile">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-money-check-dollar"></i>
+                        @T("Admin.Dashboard.StorePulse.PendingPayments")
+                        <span class="store-pulse-count">(@Model.PendingPayments.TotalCount)</span>
+                        <span class="ico-help" data-toggle="tooltip" title="@T("Admin.Dashboard.StorePulse.PendingPayments.Hint")">
+                            <i class="fas fa-circle-question"></i>
+                        </span>
+                    </h3>
+                    @if (!string.IsNullOrEmpty(Model.PendingPayments.ViewAllUrl))
+                    {
+                        <div class="card-tools float-right">
+                            <a href="@Model.PendingPayments.ViewAllUrl" class="btn btn-xs btn-info btn-flat">@T("Admin.Dashboard.StorePulse.ViewAll")</a>
+                        </div>
+                    }
+                </div>
+                <div class="card-body">
+                    <p class="text-muted store-pulse-view-all-hint">@T("Admin.Dashboard.StorePulse.PendingPayments.ViewAllHint")</p>
+                    @if (Model.PendingPayments.LoadFailed)
+                    {
+                        <p>@T("Admin.Dashboard.StorePulse.Alert.FailedLoad")</p>
+                    }
+                    else if (!Model.PendingPayments.Rows.Any())
+                    {
+                        <p class="store-pulse-empty">@T("Admin.Dashboard.StorePulse.NoItems")</p>
+                    }
+                    else
+                    {
+                        <table class="table table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>@T("Admin.Dashboard.StorePulse.PendingPayments.Fields.CustomOrderNumber")</th>
+                                    <th>@T("Admin.Dashboard.StorePulse.PendingPayments.Fields.OrderTotal")</th>
+                                    <th>@T("Admin.Dashboard.StorePulse.PendingPayments.Fields.CreatedOn")</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var row in Model.PendingPayments.Rows)
+                                {
+                                    <tr>
+                                        <td><a class="store-pulse-row-link" href="@row.Url">@row.CustomOrderNumber</a></td>
+                                        <td>@row.OrderTotal</td>
+                                        <td class="store-pulse-when" data-when="@row.CreatedOn.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture)">@row.CreatedOn.ToString("G")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.ZeroResultSearches.Visible)
+    {
+        <div class="col-md-6">
+            <div class="card card-default store-pulse-tile">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-magnifying-glass"></i>
+                        @T("Admin.Dashboard.StorePulse.ZeroResultSearches")
+                        <span class="store-pulse-count">(@Model.ZeroResultSearches.TotalCount)</span>
+                        <span class="ico-help" data-toggle="tooltip" title="@T("Admin.Dashboard.StorePulse.ZeroResultSearches.Hint")">
+                            <i class="fas fa-circle-question"></i>
+                        </span>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @if (Model.ZeroResultSearches.LoadFailed)
+                    {
+                        <p>@T("Admin.Dashboard.StorePulse.Alert.FailedLoad")</p>
+                    }
+                    else if (!Model.ZeroResultSearches.Rows.Any())
+                    {
+                        <p class="store-pulse-empty">@T("Admin.Dashboard.StorePulse.NoItems")</p>
+                    }
+                    else
+                    {
+                        <table class="table table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>@T("Admin.Dashboard.StorePulse.ZeroResultSearches.Fields.Keyword")</th>
+                                    <th>@T("Admin.Dashboard.StorePulse.ZeroResultSearches.Fields.Count")</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var row in Model.ZeroResultSearches.Rows)
+                                {
+                                    <tr>
+                                        <td><a class="store-pulse-row-link" href="@row.Url">@row.Keyword</a></td>
+                                        <td>@row.Count</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<script>
+    $(function () {
+        $('#storePulse [data-toggle="tooltip"]').tooltip({ placement: 'bottom' });
+        var locale = '@dateLocale';
+        $('#storePulse .store-pulse-when').each(function () {
+            var value = $(this).attr('data-when');
+            if (value && window.moment)
+                $(this).text(moment(value).locale(locale).format('L LTS'));
+        });
+        @if (Model.HasLoadFailure)
+        {
+            <text>$('#loadStorePulseAlert').trigger('click');</text>
+        }
+    });
+</script>

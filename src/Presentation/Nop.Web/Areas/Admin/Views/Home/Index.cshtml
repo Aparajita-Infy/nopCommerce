@@ -38,6 +38,15 @@
                         </div>
                     }
 
+                    @if (!Model.IsLoggedInAsVendor)
+                    {
+                        <div class="row">
+                            <div class="col-md-12">
+                                @await Html.PartialAsync("_StorePulse")
+                            </div>
+                        </div>
+                    }
+
                     @await Component.InvokeAsync(typeof(AdminWidgetViewComponent), new { widgetZone = AdminWidgetZones.DashboardTop, additionalData = Model })
                     @if (!Model.IsLoggedInAsVendor)
                     {
@@ -125,3 +134,4 @@
 </section>
     <nop-alert asp-alert-id="loadOrderStatisticsAlert" asp-alert-message="@T("Admin.SalesReport.OrderStatistics.Alert.FailedLoad")" />
     <nop-alert asp-alert-id="loadCustomerStatisticsAlert" asp-alert-message="@T("Admin.Reports.Customers.CustomerStatistics.Alert.FailedLoad")" />
+    <nop-alert asp-alert-id="loadStorePulseAlert" asp-alert-message="@T("Admin.Dashboard.StorePulse.Alert.FailedLoad")" />
