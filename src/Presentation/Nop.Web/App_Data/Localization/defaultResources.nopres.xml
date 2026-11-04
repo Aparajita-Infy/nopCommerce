@@ -13126,6 +13126,81 @@
   <LocaleResource Name="Admin.Dashboard.NumberOfPendingReturnRequests">
     <Value>Pending return requests</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse">
+    <Value>Store Pulse</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.AbandonedCarts">
+    <Value>Abandoned carts</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.AbandonedCarts.Fields.Email">
+    <Value>Email</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.AbandonedCarts.Fields.ItemCount">
+    <Value>Total items</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.AbandonedCarts.Fields.LastUpdated">
+    <Value>Updated on</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.AbandonedCarts.Hint">
+    <Value>Registered customers with a shopping cart last updated more than 24 hours ago and less than 30 days ago.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.Alert.FailedLoad">
+    <Value>Failed to load store pulse.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.LowStock">
+    <Value>Low stock</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.LowStock.Fields.Activity">
+    <Value>Low stock activity</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.LowStock.Fields.MinStockQuantity">
+    <Value>Minimum stock qty</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.LowStock.Fields.Name">
+    <Value>Product name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.LowStock.Fields.StockQuantity">
+    <Value>Stock quantity</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.LowStock.Hint">
+    <Value>Products and attribute combinations at or below their minimum stock quantity.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.NoItems">
+    <Value>No items</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.PendingPayments">
+    <Value>Pending payments (over 24 hours)</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.PendingPayments.Fields.CreatedOn">
+    <Value>Created on</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.PendingPayments.Fields.CustomOrderNumber">
+    <Value>Order #</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.PendingPayments.Fields.OrderTotal">
+    <Value>Order total</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.PendingPayments.Hint">
+    <Value>Orders with payment status Pending that were created more than 24 hours ago.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.PendingPayments.ViewAllHint">
+    <Value>This list also includes pending orders created less than 24 hours ago.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.ViewAll">
+    <Value>View all</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.ZeroResultSearches">
+    <Value>Zero-result searches</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.ZeroResultSearches.Fields.Count">
+    <Value>Count</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.ZeroResultSearches.Fields.Keyword">
+    <Value>Keyword</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Dashboard.StorePulse.ZeroResultSearches.Hint">
+    <Value>Keywords searched in the last 7 days that returned no products.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Documentation.Reference.Acl">
     <Value><![CDATA[Learn more about <a target="_blank" href="{0}">access control list</a>]]></Value>
   </LocaleResource>
