@@ -47,6 +47,7 @@ using Nop.Services.Seo;
 using Nop.Services.Shipping;
 using Nop.Services.Shipping.Date;
 using Nop.Services.Shipping.Pickup;
+using Nop.Services.StorePulse;
 using Nop.Services.Stores;
 using Nop.Services.Tax;
 using Nop.Services.Themes;
@@ -197,6 +198,7 @@ public partial class NopStartup : INopStartup
         services.AddScoped<IGiftCardService, GiftCardService>();
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<IOrderReportService, OrderReportService>();
+        services.AddScoped<IStorePulseService, StorePulseService>();
         services.AddScoped<IOrderProcessingService, OrderProcessingService>();
         services.AddScoped<IOrderTotalCalculationService, OrderTotalCalculationService>();
         services.AddScoped<IReturnRequestService, ReturnRequestService>();

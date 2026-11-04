@@ -348,12 +348,21 @@ public class Indexes : ForwardOnlyMigration
             .OnColumn(nameof(GenericAttribute.Key)).Ascending()
             .WithOptions().NonClustered();
 
-        //Fresh installs mark upgrade migrations applied without running them, so this index is created here too.
+        //Fresh installs mark upgrade migrations applied without running them, so these indexes are created here too.
         Create.Index(SearchTermResultCountMigration.IndexName)
             .OnTable(nameof(SearchTerm))
             .OnColumn(nameof(SearchTerm.StoreId)).Ascending()
             .OnColumn(nameof(SearchTerm.ResultCount)).Ascending()
             .OnColumn(nameof(SearchTerm.CreatedOnUtc)).Ascending()
+            .WithOptions().NonClustered();
+
+        Create.Index(ShoppingCartItemAbandonedCartIndexMigration.IndexName)
+            .OnTable(nameof(ShoppingCartItem))
+            .OnColumn(nameof(ShoppingCartItem.StoreId)).Ascending()
+            .OnColumn(nameof(ShoppingCartItem.ShoppingCartTypeId)).Ascending()
+            .OnColumn(nameof(ShoppingCartItem.CustomerId)).Ascending()
+            .OnColumn(nameof(ShoppingCartItem.UpdatedOnUtc)).Ascending()
+            .OnColumn(nameof(ShoppingCartItem.Quantity)).Ascending()
             .WithOptions().NonClustered();
     }
 
