@@ -1,8 +1,11 @@
 ﻿using AwesomeAssertions;
 using Microsoft.AspNetCore.Http;
 using Nop.Core.Domain.Catalog;
+using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Vendors;
+using Nop.Data;
 using Nop.Services.Catalog;
+using Nop.Services.Configuration;
 using Nop.Services.Vendors;
 using Nop.Web.Factories;
 using Nop.Web.Models.Catalog;
@@ -378,5 +381,74 @@ public class CatalogModelFactoryBaseTests : WebTest
         model.Products.Any().Should().BeTrue();
         model.Products.Count.Should().Be(6);
         model.UseAjaxLoading.Should().Be(_catalogSettings.UseAjaxCatalogProductsLoading);
+    }
+
+    [Test]
+    public async Task SearchStoresResultCountIncludingZeroResults()
+    {
+        //Page size 1 makes the page length differ from the search total, so a stored page length would fail.
+        var settingService = GetService<ISettingService>();
+        var catalogSettings = GetService<CatalogSettings>();
+        var originalPageSize = catalogSettings.SearchPageProductsPerPage;
+        var originalAllowSelect = catalogSettings.SearchPageAllowCustomersToSelectPageSize;
+        catalogSettings.SearchPageProductsPerPage = 1;
+        catalogSettings.SearchPageAllowCustomersToSelectPageSize = false;
+
+        var httpContext = _httpContextAccessor.HttpContext;
+        var previousQuery = httpContext.Request.QueryString;
+        var previousMethod = httpContext.Request.Method;
+        var repository = GetService<IRepository<SearchTerm>>();
+        var createdIds = new List<int>();
+
+        try
+        {
+            await settingService.SaveSettingAsync(catalogSettings, settings => settings.SearchPageProductsPerPage);
+            await settingService.SaveSettingAsync(catalogSettings, settings => settings.SearchPageAllowCustomersToSelectPageSize);
+
+            var factory = GetService<ICatalogModelFactory>();
+            httpContext.Request.Method = HttpMethods.Get;
+
+            var withResults = await SearchAndReadTermAsync(factory, repository, "Lenovo");
+            createdIds.Add(withResults.Term.Id);
+            withResults.Model.Products.Should().ContainSingle();
+            withResults.Model.TotalItems.Should().Be(2);
+            withResults.Term.ResultCount.Should().Be(withResults.Model.TotalItems);
+
+            var withoutResults = await SearchAndReadTermAsync(factory, repository, "zzznomatchverify");
+            createdIds.Add(withoutResults.Term.Id);
+            withoutResults.Model.Products.Should().BeEmpty();
+            withoutResults.Term.ResultCount.Should().Be(0);
+        }
+        finally
+        {
+            httpContext.Request.QueryString = previousQuery;
+            httpContext.Request.Method = previousMethod;
+
+            catalogSettings.SearchPageProductsPerPage = originalPageSize;
+            catalogSettings.SearchPageAllowCustomersToSelectPageSize = originalAllowSelect;
+            await settingService.SaveSettingAsync(catalogSettings, settings => settings.SearchPageProductsPerPage);
+            await settingService.SaveSettingAsync(catalogSettings, settings => settings.SearchPageAllowCustomersToSelectPageSize);
+
+            foreach (var id in createdIds)
+                await repository.DeleteAsync(term => term.Id == id);
+        }
+    }
+
+    private static async Task<(CatalogProductsModel Model, SearchTerm Term)> SearchAndReadTermAsync(ICatalogModelFactory factory, IRepository<SearchTerm> repository, string keyword)
+    {
+        var httpContext = GetService<IHttpContextAccessor>().HttpContext;
+        httpContext.Request.QueryString = new QueryString($"?q={keyword}");
+
+        var beforeId = (await repository.GetAllAsync(query => query.Where(term => term.Keyword == keyword)))
+            .Select(term => term.Id)
+            .DefaultIfEmpty(0)
+            .Max();
+
+        var model = await factory.PrepareSearchProductsModelAsync(new SearchModel { q = keyword }, new CatalogProductsCommand());
+
+        var created = (await repository.GetAllAsync(query => query.Where(term => term.Keyword == keyword && term.Id > beforeId)))
+            .Should().ContainSingle().Subject;
+
+        return (model, created);
     }
 }

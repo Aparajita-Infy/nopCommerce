@@ -1786,7 +1786,8 @@ public partial class CatalogModelFactory : ICatalogModelFactory
                         Keyword = searchTerms,
                         StoreId = currentStore.Id,
                         CustomerId = customer.Id,
-                        CreatedOnUtc = DateTime.UtcNow
+                        CreatedOnUtc = DateTime.UtcNow,
+                        ResultCount = products.TotalCount
                     });
                 }
 
