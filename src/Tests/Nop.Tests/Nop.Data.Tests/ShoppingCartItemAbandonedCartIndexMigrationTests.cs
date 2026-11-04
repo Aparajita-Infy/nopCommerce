@@ -13,6 +13,31 @@ namespace Nop.Tests.Nop.Data.Tests;
 [TestFixture]
 public class ShoppingCartItemAbandonedCartIndexMigrationTests : BaseNopTest
 {
+    /// <summary>
+    /// PostgreSQL NAMEDATALEN keeps 63 characters of an identifier. MySQL allows 64 and rejects a longer name.
+    /// </summary>
+    private const int MaxIndexNameLength = 63;
+
+    [Test]
+    public void StorePulseIndexNamesFitMySqlAndPostgreSql()
+    {
+        var indexNames = typeof(SearchTermResultCountMigration).Assembly
+            .GetTypes()
+            .Where(type => type.Namespace == typeof(SearchTermResultCountMigration).Namespace)
+            .Select(type => type.GetField(nameof(SearchTermResultCountMigration.IndexName), BindingFlags.Public | BindingFlags.Static))
+            .Where(field => field is { IsLiteral: true, FieldType: not null } && field.FieldType == typeof(string))
+            .Select(field => (string)field.GetRawConstantValue())
+            .ToList();
+
+        indexNames.Should().BeEquivalentTo(new[]
+        {
+            SearchTermResultCountMigration.IndexName,
+            ShoppingCartItemAbandonedCartIndexMigration.IndexName
+        });
+        indexNames.Should().OnlyContain(name => name.Length > 0 && name.Length <= MaxIndexNameLength);
+        ShoppingCartItemAbandonedCartIndexMigration.IndexName.Should().Be("IX_ShoppingCartItem_AbandonedCart");
+    }
+
     [Test]
     public async Task AbandonedCartIndexIsCreatedOnInstallAndByTheUpgradeMigration()
     {
