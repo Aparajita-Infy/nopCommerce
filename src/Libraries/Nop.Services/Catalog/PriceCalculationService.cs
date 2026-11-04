@@ -31,6 +31,16 @@ public partial class PriceCalculationService : IPriceCalculationService
     protected readonly IProductService _productService;
     protected readonly IStaticCacheManager _staticCacheManager;
 
+    /// <summary>
+    /// Identifier for the in-memory Thanksgiving discount. Negative so it never matches a stored discount.
+    /// </summary>
+    protected const int ThanksgivingDiscountId = -1;
+
+    /// <summary>
+    /// Storewide Thanksgiving percentage. The catalog map does not define a start or end date, so the offer stays active while discounts are enabled and does not require a coupon.
+    /// </summary>
+    protected const decimal ThanksgivingDiscountPercentage = 5m;
+
     #endregion
 
     #region Ctor
@@ -297,7 +307,33 @@ public partial class PriceCalculationService : IPriceCalculationService
                 allowedDiscounts.Add(discount);
         }
 
+        //Thanksgiving is offered on every product. It joins the existing preferred-discount
+        //selection, so a larger discount already applied to this product still wins.
+        var thanksgivingDiscount = PrepareThanksgivingDiscount();
+        if (!_discountService.ContainsDiscount(allowedDiscounts, thanksgivingDiscount))
+            allowedDiscounts.Add(thanksgivingDiscount);
+
         return allowedDiscounts;
+    }
+
+    /// <summary>
+    /// Gets the storewide Thanksgiving discount
+    /// </summary>
+    /// <returns>Thanksgiving discount</returns>
+    protected virtual Discount PrepareThanksgivingDiscount()
+    {
+        return new Discount
+        {
+            Id = ThanksgivingDiscountId,
+            Name = "Thanksgiving",
+            DiscountType = DiscountType.AssignedToSkus,
+            UsePercentage = true,
+            DiscountPercentage = ThanksgivingDiscountPercentage,
+            RequiresCouponCode = false,
+            IsCumulative = false,
+            IsActive = true,
+            DiscountLimitation = DiscountLimitationType.Unlimited
+        };
     }
 
     /// <summary>
