@@ -71,6 +71,7 @@ using Nop.Services.Seo;
 using Nop.Services.Shipping;
 using Nop.Services.Shipping.Date;
 using Nop.Services.Shipping.Pickup;
+using Nop.Services.StorePulse;
 using Nop.Services.Stores;
 using Nop.Services.Tax;
 using Nop.Services.Themes;
@@ -371,6 +372,7 @@ public partial class BaseNopTest
         services.AddTransient<IGiftCardService, GiftCardService>();
         services.AddTransient<IOrderService, OrderService>();
         services.AddTransient<IOrderReportService, OrderReportService>();
+        services.AddTransient<IStorePulseService, StorePulseService>();
         services.AddTransient<IOrderProcessingService, OrderProcessingService>();
         services.AddTransient<IOrderTotalCalculationService, OrderTotalCalculationService>();
         services.AddTransient<IReturnRequestService, ReturnRequestService>();
