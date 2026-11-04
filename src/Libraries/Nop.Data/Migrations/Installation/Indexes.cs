@@ -13,6 +13,7 @@ using Nop.Core.Domain.Stores;
 using Nop.Core.Domain.Topics;
 using Nop.Data.Extensions;
 using Nop.Data.Mapping;
+using Nop.Data.Migrations.UpgradeTo510;
 
 namespace Nop.Data.Migrations.Installation;
 
@@ -345,6 +346,14 @@ public class Indexes : ForwardOnlyMigration
             .OnColumn(nameof(GenericAttribute.EntityId)).Ascending()
             .OnColumn(nameof(GenericAttribute.KeyGroup)).Ascending()
             .OnColumn(nameof(GenericAttribute.Key)).Ascending()
+            .WithOptions().NonClustered();
+
+        //Fresh installs mark upgrade migrations applied without running them, so this index is created here too.
+        Create.Index(SearchTermResultCountMigration.IndexName)
+            .OnTable(nameof(SearchTerm))
+            .OnColumn(nameof(SearchTerm.StoreId)).Ascending()
+            .OnColumn(nameof(SearchTerm.ResultCount)).Ascending()
+            .OnColumn(nameof(SearchTerm.CreatedOnUtc)).Ascending()
             .WithOptions().NonClustered();
     }
 

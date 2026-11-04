@@ -46,15 +46,30 @@ public class SearchTermServiceTests : ServiceTest
         await _searchTermRepository.DeleteAsync(term => term.CustomerId == _customer.Id);
     }
 
-    private async Task InsertSearchTermAsync(string keyword)
+    private async Task InsertSearchTermAsync(string keyword, int? resultCount = null)
     {
         await _searchTermService.InsertSearchTermAsync(new SearchTerm
         {
             Keyword = keyword,
             CustomerId = _customer.Id,
             StoreId = STORE_ID,
-            CreatedOnUtc = DateTime.UtcNow
+            CreatedOnUtc = DateTime.UtcNow,
+            ResultCount = resultCount
         });
+    }
+
+    [Test]
+    public async Task InsertSearchTermShouldPersistResultCountIncludingZeroAndNull()
+    {
+        await InsertSearchTermAsync("zero-results", 0);
+        await InsertSearchTermAsync("some-results", 4);
+        await InsertSearchTermAsync("unknown-results");
+
+        var terms = await _searchTermRepository.GetAllAsync(query => query.Where(term => term.CustomerId == _customer.Id));
+
+        terms.Should().ContainSingle(term => term.Keyword == "zero-results").Which.ResultCount.Should().Be(0);
+        terms.Should().ContainSingle(term => term.Keyword == "some-results").Which.ResultCount.Should().Be(4);
+        terms.Should().ContainSingle(term => term.Keyword == "unknown-results").Which.ResultCount.Should().BeNull();
     }
 
     [Test]

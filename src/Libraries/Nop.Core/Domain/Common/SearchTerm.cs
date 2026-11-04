@@ -26,6 +26,11 @@ public partial class SearchTerm : BaseEntity, ISoftDeletedEntity
     public DateTime CreatedOnUtc { get; set; }
 
     /// <summary>
+    /// Gets or sets the number of products the search returned; null when the count was not recorded
+    /// </summary>
+    public int? ResultCount { get; set; }
+
+    /// <summary>
     /// Gets or sets a value indicating whether the entity has been deleted
     /// </summary>
     public bool Deleted { get; set; }
