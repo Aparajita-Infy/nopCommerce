@@ -17,9 +17,11 @@ namespace Nop.Data.Migrations.UpgradeTo510;
 public class ShoppingCartItemAbandonedCartIndexMigration : ForwardOnlyMigration
 {
     /// <summary>
-    /// Store, cart type, customer, latest update, then quantity.
+    /// Short name shared by the install and upgrade paths.
+    /// MySQL rejects identifiers longer than 64 characters, and PostgreSQL truncates them at 63,
+    /// so the column list stays in the index key and out of the name.
     /// </summary>
-    public const string IndexName = "IX_ShoppingCartItem_StoreId_ShoppingCartTypeId_CustomerId_UpdatedOnUtc_Quantity";
+    public const string IndexName = "IX_ShoppingCartItem_AbandonedCart";
 
     /// <summary>
     /// Collect the UP migration expressions
